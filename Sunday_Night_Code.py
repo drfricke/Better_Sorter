@@ -17,12 +17,13 @@ data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
 frame, image, = None, None
 
-Key = 'kx15xz-TA8B0o6-pfhTJbW3YqcjAhpwyIUu5KAiJCp'
 
 def get_key():
     fin = open('key.txt')
     for element in fin:
         return element
+
+Key = get_key()
 
 def SL_setup():
      urlBase = "https://api.systemlinkcloud.com/nitag/v2/tags/"
