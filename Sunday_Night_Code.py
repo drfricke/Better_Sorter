@@ -11,7 +11,7 @@ model = tensorflow.keras.models.load_model('keras_model.h5')
 
 # Create the array of the right shape to feed into the keras model
 # The 'length' or number of images you can put into the array is
-# determined by the first position in the shape tuple, in this case 1.
+# determined by the first position in the qshape tuple, in this case 1.
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
 
@@ -66,7 +66,7 @@ def prediction(frame):
     image_array = np.asarray(image)
 
     # display the resized image
-    image.show()
+    #image.show()
 
     # Normalize the image
     normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
@@ -87,6 +87,8 @@ image = cv2.VideoCapture(0)
 while(True):
     # Capture frame-by-frame
     ret, frame = image.read()
+    # crop
+    frame = frame[200:700,400:900]
     # Display the resulting frame
     cv2.imshow('frame',frame)
     
@@ -98,6 +100,8 @@ while(True):
         cv2.destroyAllWindows()
         print('Good Bye!')
         break
+    if Get_SL('move') == 'true':
+        prediction(frame)
     #adding system link commands???
 
 
