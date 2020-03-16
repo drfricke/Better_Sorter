@@ -95,9 +95,7 @@ def which_bin(shape):
     value = int(shape) 
     target = -200 * value
     belt.run_target(500,target)
-# m_elbow.run_target(500,1200)
-# wait(30)
-# m_elbow.run_target(500,0)
+
 def sorter():
     open_up()
     while go_button.pressed() != True:
