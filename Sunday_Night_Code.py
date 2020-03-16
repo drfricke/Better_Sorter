@@ -14,16 +14,18 @@ model = tensorflow.keras.models.load_model('keras_model.h5')
 # determined by the first position in the qshape tuple, in this case 1.
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
-
+#start up variables
 frame, image, = None, None
 
-
+#get password
 def get_key():
     fin = open('key.txt')
     for element in fin:
         return element
 
 Key = get_key()
+
+#System link setup, gets, and puts
 
 def SL_setup():
      urlBase = "https://api.systemlinkcloud.com/nitag/v2/tags/"
@@ -53,6 +55,8 @@ def Put_SL(Tag, Type, Value):
           reply = 'failed'
      return reply
 
+#funtion that handles predition model
+
 def prediction(frame):
     #resize the image to a 224x224 with the same strategy as in TM2:
     #resizing the image to be at least 224x224 and then cropping from the center
@@ -74,24 +78,25 @@ def prediction(frame):
     # Load the image into the array
     data[0] = normalized_image_array
 
-    # run the inference
+    # run the inference and give predition
     prediction = model.predict(data)
     print(prediction)
     print(np.argmax(prediction))
     shape_index = np.argmax(prediction)
     Put_SL('shape', 'STRING', str(shape_index))
 
-
+#Turns camera on
 image = cv2.VideoCapture(0)
 
 while(True):
     # Capture frame-by-frame
     ret, frame = image.read()
-    # crop
+    # crop! Very important improves predictions!
     frame = frame[200:700,400:900]
     # Display the resulting frame
     cv2.imshow('frame',frame)
     
+    #Allows user to excute commands and quit
     key = cv2.waitKey(1) & 0xFF
     if key  == ord('q'):
         prediction(frame)
@@ -100,9 +105,9 @@ while(True):
         cv2.destroyAllWindows()
         print('Good Bye!')
         break
+    #Allows EV3 to interact and get predictions via sys link
     if Get_SL('move') == 'true':
         prediction(frame)
-    #adding system link commands???
 
 
 
